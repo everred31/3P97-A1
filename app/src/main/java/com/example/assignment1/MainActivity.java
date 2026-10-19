@@ -108,8 +108,11 @@ public class MainActivity extends AppCompatActivity {
             int current = Integer.parseInt(display.getText().toString());
 
             if (second) {
+
                 saved = calculate(saved, current, operand);
                 display.setText(String.valueOf(saved));
+
+
             }
             else{
                 saved = current;
@@ -123,9 +126,13 @@ public class MainActivity extends AppCompatActivity {
         equal.setOnClickListener(v -> {
             if (second){
                 int current = Integer.parseInt(display.getText().toString());
-                result = calculate(saved, current, operand);
-                display.setText(String.valueOf(result));
 
+                if (operand == 4 && current == 0) {
+                    display.setText("Error");
+                } else {
+                    result = calculate(saved, current, operand);
+                    display.setText(String.valueOf(result));
+                }
 
                 saved = 0;
                 second = false;
@@ -143,12 +150,14 @@ public class MainActivity extends AppCompatActivity {
             opDisplay.setText("");
         });
         clear.setOnClickListener(v -> {
-            if (Integer.parseInt(display.getText().toString()) == 0){
+            if (!num){
                 operand = 0;
-                opDisplay.setText("0");
+                opDisplay.setText("");
+                num = true;
             }
             else{
                 display.setText("0");
+                num = false;
             }
         });
     }
@@ -176,11 +185,14 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 return first * second;
             case 4:
-                display.setText("Error");
+
                 if (second == 0){
-                    throw new RuntimeException();
+                    display.setText("Error");
+                    return 0;
+                }else{
+                    return first / second;
                 }
-                return first / second;
+
         }
         return second;
     }
