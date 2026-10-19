@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
     TextView display;
+    TextView opDisplay;
     int operand; // 1, 2, 3, 4
     boolean second = false;
     boolean operation = true;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         display = findViewById(R.id.display);
+        opDisplay = findViewById(R.id.opDisplay);
 
         Button one = findViewById(R.id.one);
         Button two = findViewById(R.id.two);
@@ -54,68 +56,76 @@ public class MainActivity extends AppCompatActivity {
         Button allClear = findViewById(R.id.allClear);
 
         add.setOnClickListener(v -> {
-                if (!second) {
-                    saved = Integer.parseInt(display.getText().toString());
-                    operand = 1;
-                    display.setText("0");
-                    second = true;
+            int current = Integer.parseInt(display.getText().toString());
+                if (second) {
+                    saved = calculate(saved, current, operand);
+                    display.setText(String.valueOf(saved));
                 }
+                else{
+                    saved = current;
+                }
+            operand = 1;
+            opDisplay.setText("+");
+                second = true;
+                operation = false;
             });
         subtract.setOnClickListener(v -> {
-                    if (!second) {
-                        saved = Integer.parseInt(display.getText().toString());
-                        operand = 2;
-                        display.setText("0");
-                        second = true;
-                    }
+            int current = Integer.parseInt(display.getText().toString());
+
+                if (second) {
+                    saved = calculate(saved, current, operand);
+                    display.setText(String.valueOf(saved));
+                }
+                else{
+                    saved = current;
+                }
+            operand = 2;
+            opDisplay.setText("-");
+                second = true;
+                operation = false;
                 });
         multiply.setOnClickListener(v -> {
-                    if (!second) {
-                        saved = Integer.parseInt(display.getText().toString());
-                        operand = 3;
-                        display.setText("0");
-                        second = true;
-                    }
+            int current = Integer.parseInt(display.getText().toString());
+
+                if (second) {
+                    saved = calculate(saved, current, operand);
+                    display.setText(String.valueOf(saved));
+                }
+                else{
+                    saved = current;
+                }
+                second = true;
+                operation = false;
+            operand = 3;
+            opDisplay.setText("*");
                 });
         division.setOnClickListener(v -> {
-                    if (!second) {
-                        saved = Integer.parseInt(display.getText().toString());
-                        operand = 4;
-                        display.setText("0");
-                        second = true;
-                    }
-                });
+            int current = Integer.parseInt(display.getText().toString());
+
+            if (second) {
+                saved = calculate(saved, current, operand);
+                display.setText(String.valueOf(saved));
+            }
+            else{
+                saved = current;
+            }
+            operand = 4;
+            opDisplay.setText("/");
+            second = true;
+            operation = false;
+        });
         equal.setOnClickListener(v -> {
             if (second){
-                switch (operand){
-                    case 0: //i dont think this is necessary but it is here in case i need to add behaviour
-                        break;
-                    case 1:
-                        result = saved + Integer.parseInt(display.getText().toString());
-                        display.setText(String.valueOf(result));
-                        break;
-                    case 2:
-                        result = saved - Integer.parseInt(display.getText().toString());
-                        display.setText(String.valueOf(result));
-                        break;
-                    case 3:
-                        result = saved * Integer.parseInt(display.getText().toString());
-                        display.setText(String.valueOf(result));
-                        break;
-                    case 4:
-                        if (Integer.parseInt(display.getText().toString()) == 0){
-                            display.setText("Error");
-                            break;
-                        }
-                        result = saved / Integer.parseInt(display.getText().toString());
-                        display.setText(String.valueOf(result));
-                        break;
-                }
+                int current = Integer.parseInt(display.getText().toString());
+                result = calculate(saved, current, operand);
+                display.setText(String.valueOf(result));
 
 
                 saved = 0;
                 second = false;
                 operation = false;
+                operand = 0;
+                opDisplay.setText("");
             }
         });
         allClear.setOnClickListener(v -> {
@@ -123,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
             display.setText("0");
             operation = true;
             second = false;
+            opDisplay.setText("");
         });
     }
     private void setupNumberButton(Button button, String number) {
@@ -136,5 +147,23 @@ public class MainActivity extends AppCompatActivity {
                 display.append(number);
             }
         });
+    }
+
+    private int calculate(int first, int second, int operand) {
+        switch (operand) {
+            case 1:
+                return first + second;
+            case 2:
+                return first - second;
+            case 3:
+                return first * second;
+            case 4:
+                display.setText("Error");
+                if (second == 0){
+                    throw new RuntimeException();
+                }
+                return first / second;
+        }
+        return second;
     }
 }
