@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     boolean operation = true;
     int saved;
     int result;
+    boolean num;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         Button division = findViewById(R.id.division);
         Button equal = findViewById(R.id.equal);
         Button allClear = findViewById(R.id.allClear);
+        Button clear = findViewById(R.id.clear);
 
         add.setOnClickListener(v -> {
             int current = Integer.parseInt(display.getText().toString());
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             opDisplay.setText("+");
                 second = true;
                 operation = false;
+                num = false;
             });
         subtract.setOnClickListener(v -> {
             int current = Integer.parseInt(display.getText().toString());
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             opDisplay.setText("-");
                 second = true;
                 operation = false;
+            num = false;
                 });
         multiply.setOnClickListener(v -> {
             int current = Integer.parseInt(display.getText().toString());
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 operation = false;
             operand = 3;
             opDisplay.setText("*");
+            num = false;
                 });
         division.setOnClickListener(v -> {
             int current = Integer.parseInt(display.getText().toString());
@@ -113,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             opDisplay.setText("/");
             second = true;
             operation = false;
+            num = false;
         });
         equal.setOnClickListener(v -> {
             if (second){
@@ -126,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 operation = false;
                 operand = 0;
                 opDisplay.setText("");
+                num = false;
             }
         });
         allClear.setOnClickListener(v -> {
@@ -135,6 +142,15 @@ public class MainActivity extends AppCompatActivity {
             second = false;
             opDisplay.setText("");
         });
+        clear.setOnClickListener(v -> {
+            if (Integer.parseInt(display.getText().toString()) == 0){
+                operand = 0;
+                opDisplay.setText("0");
+            }
+            else{
+                display.setText("0");
+            }
+        });
     }
     private void setupNumberButton(Button button, String number) {
         button.setOnClickListener(v -> {
@@ -143,8 +159,10 @@ public class MainActivity extends AppCompatActivity {
             if (current.equals("0") || !operation) {
                 display.setText(number);
                 operation = true;
+                num = true;
             } else {
                 display.append(number);
+                num = true;
             }
         });
     }
