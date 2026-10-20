@@ -1,4 +1,4 @@
-    package com.example.assignment1;
+package com.example.assignment1;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -16,9 +16,10 @@ public class MainActivity extends AppCompatActivity {
     int operand; // 1, 2, 3, 4
     boolean second = false;
     boolean operation = true;
-    int saved;
-    int result;
+    double saved;
+    double result;
     boolean num;
+    boolean isDecimal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,16 +39,16 @@ public class MainActivity extends AppCompatActivity {
         Button nine = findViewById(R.id.nine);
         Button zero = findViewById(R.id.zero);
 
-        setupNumberButton(one, "1");
-        setupNumberButton(two, "2");
-        setupNumberButton(three, "3");
-        setupNumberButton(four, "4");
-        setupNumberButton(five, "5");
-        setupNumberButton(six, "6");
-        setupNumberButton(seven, "7");
-        setupNumberButton(eight, "8");
-        setupNumberButton(nine, "9");
-        setupNumberButton(zero, "0");
+        setupButtons(one, "1");
+        setupButtons(two, "2");
+        setupButtons(three, "3");
+        setupButtons(four, "4");
+        setupButtons(five, "5");
+        setupButtons(six, "6");
+        setupButtons(seven, "7");
+        setupButtons(eight, "8");
+        setupButtons(nine, "9");
+        setupButtons(zero, "0");
 
         Button add = findViewById(R.id.addition);
         Button subtract = findViewById(R.id.subtraction);
@@ -56,9 +57,10 @@ public class MainActivity extends AppCompatActivity {
         Button equal = findViewById(R.id.equal);
         Button allClear = findViewById(R.id.allClear);
         Button clear = findViewById(R.id.clear);
+        Button decimal = findViewById(R.id.decimal);
 
         add.setOnClickListener(v -> {
-            int current = Integer.parseInt(display.getText().toString());
+            double current = Double.parseDouble(display.getText().toString());
                 if (second) {
                     saved = calculate(saved, current, operand);
                     display.setText(String.valueOf(saved));
@@ -73,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 num = false;
             });
         subtract.setOnClickListener(v -> {
-            int current = Integer.parseInt(display.getText().toString());
+            double current = Double.parseDouble(display.getText().toString());
 
-                if (second) {
+            if (second) {
                     saved = calculate(saved, current, operand);
                     display.setText(String.valueOf(saved));
                 }
@@ -89,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
             num = false;
                 });
         multiply.setOnClickListener(v -> {
-            int current = Integer.parseInt(display.getText().toString());
+            double current = Double.parseDouble(display.getText().toString());
 
-                if (second) {
+            if (second) {
                     saved = calculate(saved, current, operand);
                     display.setText(String.valueOf(saved));
                 }
@@ -105,14 +107,12 @@ public class MainActivity extends AppCompatActivity {
             num = false;
                 });
         division.setOnClickListener(v -> {
-            int current = Integer.parseInt(display.getText().toString());
+            double current = Double.parseDouble(display.getText().toString());
 
             if (second) {
 
                 saved = calculate(saved, current, operand);
                 display.setText(String.valueOf(saved));
-
-
             }
             else{
                 saved = current;
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         });
         equal.setOnClickListener(v -> {
             if (second){
-                int current = Integer.parseInt(display.getText().toString());
+                double current = Double.parseDouble(display.getText().toString());
 
                 if (operand == 4 && current == 0) {
                     display.setText("Error");
@@ -160,23 +160,28 @@ public class MainActivity extends AppCompatActivity {
                 num = false;
             }
         });
+        decimal.setOnClickListener(v -> {
+            if (!isDecimal){
+                display.append(".");
+                isDecimal = true;
+            }
+        });
     }
-    private void setupNumberButton(Button button, String number) {
+    private void setupButtons(Button button, String number) {
         button.setOnClickListener(v -> {
             String current = display.getText().toString();
 
             if (current.equals("0") || !operation) {
                 display.setText(number);
                 operation = true;
-                num = true;
             } else {
                 display.append(number);
-                num = true;
             }
+            num = true;
         });
     }
 
-    private int calculate(int first, int second, int operand) {
+    private double calculate(double first, double second, int operand) {
         switch (operand) {
             case 1:
                 return first + second;
